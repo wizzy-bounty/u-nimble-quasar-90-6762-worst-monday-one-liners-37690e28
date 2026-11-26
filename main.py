@@ -1,19 +1,20 @@
 import os
+from pathlib import Path
+
+ENTRY = "I opened Monday's first email at 9:00; by 9:07 it had become a task force, a spreadsheet, and a recurring meeting."
 
 
-ENTRY_TEXT = "By Monday noon I'd fixed the outage, then learned the cause was a cron job I named 'temporary' in March."
+def write_entry(output_dir):
+    output_dir.mkdir(parents=True, exist_ok=True)
+    (output_dir / "entry.txt").write_text(ENTRY, encoding="utf-8")
 
 
-def entry_text():
-    return ENTRY_TEXT
+def resolve_output_dir():
+    return Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
 
 
 def main():
-    output_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
-    os.makedirs(output_dir, exist_ok=True)
-    output_path = os.path.join(output_dir, "entry.txt")
-    with open(output_path, "w", encoding="utf-8") as entry_file:
-        entry_file.write(entry_text())
+    write_entry(resolve_output_dir())
 
 
 if __name__ == "__main__":
